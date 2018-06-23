@@ -1,0 +1,168 @@
+<html>
+    <head>
+        <script>
+            let statusLine;
+            let divDisconnected;
+            let divConnected;
+            let selectUser;
+            let selectPort;
+            let selectedUser;
+            let selectedPort;
+            let selectedRecipient;
+            let socket;
+            let user;
+            let port;
+            let recipient;
+
+            // Message constants
+            const IM            = 'im';
+            const IDENT         = 'identify';
+            const CONNECT       = 'connect';
+            const DISCONNECT    = 'disconnect';
+            const CONNECT_ERR   = 'connect_error';
+            const RECONNECT_ERR = 'reconnect_error';
+
+            // Initialize the page when loaded
+            function init()
+            {
+                divDisconnected = document.getElementById("divDisconnected");
+                selectUser = document.getElementById("selectUser");
+                selectPort = document.getElementById("selectPort");
+                divConnected = document.getElementById("divConnected");
+                selectedUser = document.getElementById("selectedUser");
+                selectedPort = document.getElementById("selectedPort");
+                selectedRecipient = document.getElementById("selectedRecipient");
+                statusLine = document.getElementById("statusLine");
+                writeStatus('SELECT A USER AND PORT TO CONNECT');
+            }
+
+            // User clicked connect button
+            function connect()
+            {
+                // Show the selected user and port
+                selectedUser.innerHTML = user = selectUser.value;
+                selectedPort.innerHTML = port = selectPort.value;
+
+                // Set the recipient to send an im to
+                selectedRecipient.innerHTML = recipient = (user === 'Anna') ? 'Billy':'Anna';
+
+                // Connect
+                let host = 'http://localhost:'+port;
+                socket = io.connect(host);
+
+                // Set listeners
+                socket.on(CONNECT, onConnected );
+                socket.on(DISCONNECT, onDisconnected );
+                socket.on(CONNECT_ERR, onError );
+                socket.on(RECONNECT_ERR, onError );
+
+                // Received connect event from socket
+                function onConnected()
+                {
+                    writeStatus("CONNECTED");
+                    divConnected.className = 'show';
+                    divDisconnected.className = 'hide';
+                    sendIdent(user); // Should be a a user id, using a name for clarity
+
+                    socket.on(IM, onIm );
+                    function onIm(message)
+                    {
+                        writeStatus('RECEIVED: '+message.text);
+                    }
+
+                }
+
+                // Received disconnect event from socket
+                function onDisconnected()
+                {
+                    writeStatus("DISCONNECTED");
+                    divConnected.className = 'hide';
+                    divDisconnected.className = 'show';
+                }
+
+                // Received error from socket
+                function onError(message)
+                {
+                    writeStatus('<span style="color: red;">ERROR:</span> ' + message);
+                    socket.close();
+                }
+            }
+
+            // Send an identification message to the server
+            function sendIdent(userId)
+            {
+                socket.emit(IDENT, userId);
+                writeStatus("SENT: " + IDENT + " / " + userId);
+            }
+
+            // Send a message over the socket
+            function sendIm(message)
+            {
+                socket.emit(IM, {'from': user, 'to': recipient, 'text': message, 'forwarded':false});
+                writeStatus("SENT: " + IM + " / " + message);
+            }
+
+            // Output status
+            function writeStatus(message)
+            {
+                statusLine.innerHTML = message;
+            }
+
+            // Close the socket
+            function disconnect() {
+                socket.close();
+            }
+
+            window.addEventListener("load", init, false);
+        </script>
+        <style>
+            .hide {display:none;}
+            .show {display:block;}
+        </style>
+    </head>
+    <body>
+        <h2>Instant Message Client</h2>
+
+        <!-- STATUS OUTPUT -->
+        <div id="statusLine"></div>
+
+        <!-- CONTROLS WHEN NOT CONNECTED -->
+        <div id="divDisconnected" class="show">
+            <p><b>User</b>
+            <select id="selectUser">
+                <option>Anna</option>
+                <option>Billy</option>
+            </select>
+            </p>
+
+            <p><b>Port</b>
+            <select id="selectPort">
+                <option>3001</option>
+                <option>3002</option>
+                <option>3003</option>
+                <option>3004</option>
+            </select>
+            </p>
+            <button id="btnConnect" onclick="connect()">Connect</button>
+        </div>
+
+        <!-- CONTROLS WHEN CONNECTED -->
+        <div id="divConnected" class="hide">
+            <p><b>User</b><div id="selectedUser"></div></p>
+            <p><b>Port</b><div id="selectedPort"></div></p>
+            <p><b>Recipient:</b><div id="selectedRecipient"></div></p>
+            <p><b>Message</b>
+                <div><input id="userInput"/>
+                <button id="btnSend" onclick="sendIm(userInput.value)">Send</button>
+                </div>
+            </p>
+
+            <p><button id="btnDisconnect" onclick="disconnect()">Disconnect</button></p>
+
+        </div>
+
+        <!-- VENDOR JS -->
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    </body>
+</html>
