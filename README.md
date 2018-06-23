@@ -12,8 +12,18 @@ With this server, any number of instances can be launched on different IP/Port c
 and they will establish and maintain connections to each other. When an instance receives a 
 message for a user it doesn't know, it will forward it to all its peers.
 
-And since a user could be connected to multiple server instances with separate clients, the message
-is also forwarded to peers.
+Also, since a user could be connected to multiple server instances with separate clients, the
+message is also forwarded to peers.
+
+## TODO
+In the current implementation, instances have no idea which users are connected to their peers.
+This means there is too much chattiness between peers. Basically every message goes out to every
+server, defeating the purpose of multiple server instances. 
+
+The coming fix will add to the peer-to-peer protocol a message that says when a user connects
+or disconnects. So all peers will be aware of each other's users, and messages will only be
+forwarded to servers where the recipient has a connection.
+
 
 ## Setup
 
