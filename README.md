@@ -8,6 +8,13 @@ This one takes it to the next level: **multi-server support**.
 Single-endpoint examples are great for learning the basics of socket communications with Node, 
 but there's only so much traffic one server can handle. In short, it won't scale. 
 
+With this server, any number of instances can be launched on different IP/Port combinations
+and they will establish and maintain connections to each other. When an instance receives a 
+message for a user it doesn't know, it will forward it to all its peers.
+
+And since a user could be connected to multiple server instances with separate clients, the message
+is also forwarded to peers.
+
 ## Setup
 
 ### Install Node and npm
