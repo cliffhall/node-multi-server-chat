@@ -22,8 +22,8 @@ server, defeating the purpose of multiple server instances.
 
 The coming fix will add to the peer-to-peer protocol a message that says when a user connects
 or disconnects. So all peers will be aware of each other's users, and messages will only be
-forwarded to servers where the recipient has a connection.
-
+forwarded to servers where the recipient has a connection. Also, on a peer reconnect, a user
+list will be sent.
 
 ## Setup
 
