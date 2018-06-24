@@ -199,6 +199,7 @@ function onConnection(connection) {
                     delete users[userId];
                 }
             }
+            reportUserConnections(userId);
         }
 
         // Remove listeners
@@ -209,6 +210,22 @@ function onConnection(connection) {
 
     // Report user connections
     function reportUserConnections(user){
-        console.log(`User: ${user} connected ${users[user].length} times.`);
+        // Report number of connections on console
+        let count = users[user] ? users[user].length : 0;
+        if (count) console.log(`User: ${user} connected ${count} time${(count>1)?'s':''}.`);
+
+        // Update peers
+        console.log(`Updating peers with user: ${user}...`);
+        let message = {
+            peerId: myId,
+            user: {
+                id: user,
+                connections: count
+            }
+        };
+        config.servers.forEach( server => {
+            let peer = peers[server.id];
+            if (peer) peer.emit(UPDATE_PEER, message);
+        });
     }
 }
