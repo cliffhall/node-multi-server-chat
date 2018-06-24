@@ -35,24 +35,6 @@ list will be sent.
 
 ```npm install```
 
-## Design Assumptions
-  * A scalable chat server should be able to communicate not only with the client, but with any number of peer instances. 
-  * A client should be able to connect to any running instance and chat with a user on any other instance as though they were connected to the same instance.
-  * The mechanism for connecting a user to a given instance is immaterial. It could be that the client chooses a random instance from a known list, or is assigned one by a load-balancer.
-  * A given user could be connected with multiple clients, and so when a message is sent to them, all the user's clients should receive the message.
-  
-  
-## Server Configuration
-A configuration file ```config.json``` contains entries for all instances, so they can listen on the right port and connect to their peers.
-For simplicity's sake, server instances are configured to be launched on different ports of your local machine, 
-but instances to run on any port / IP address:
-
-    {
-      "id": "server-1",
-      "ip": "127.0.0.1",
-      "port": 3001
-    },
-
 ## Launching Server Instances
 For convenience, several npm scripts have been defined in ```package.json``` for launching the server instances.
 
@@ -70,6 +52,23 @@ In each of four separate terminal windows, enter one of the following commands:
 ```npm run start-server-3```
 
 ```npm run start-server-4```
+
+## Design Assumptions
+  * A scalable chat server should be able to communicate not only with the client, but with any number of peer instances. 
+  * A client should be able to connect to any running instance and chat with a user on any other instance as though they were connected to the same instance.
+  * The mechanism for connecting a user to a given instance is immaterial. It could be that the client chooses a random instance from a known list, or is assigned one by a load-balancer.
+  * A given user could be connected with multiple clients, and so when a message is sent to them, all the user's clients should receive the message.
+  
+## Server Configuration
+A configuration file ```config.json``` contains entries for all instances, so they can listen on the right port and connect to their peers.
+For simplicity's sake, server instances are configured to be launched on different ports of your local machine, 
+but instances to run on any port / IP address:
+
+    {
+      "id": "server-1",
+      "ip": "127.0.0.1",
+      "port": 3001
+    },
 
 ## Server Behavior
 ### Peer connections
