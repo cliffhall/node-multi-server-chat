@@ -74,9 +74,7 @@ but instances to run on any port / IP address:
 ### Peer connections
 
 When a server instance is launched, it begins listening on its assigned port and then attempts connection to its peers.
-
 If a peer cannot be reached at launch time, instances will continue to retry until it becomes available.
-
 If a connected peer disconnects at runtime, other instances will attempt to reconnect until it appears again. 
   
   
