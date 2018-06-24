@@ -1,29 +1,29 @@
 # node-multi-server-chat
 
+## What is this?
 A multi-server chat example built with Node.js and Socket.io.
 
-Simple Node-based chat server examples abound on GitHub. 
-This one takes it to the next level: **multi-server support**.
-
-Single-endpoint examples are great for learning the basics of socket communications with Node, 
+Simple Node-based chat server examples abound on GitHub. Single-endpoint examples 
+are great for learning the basics of socket communications with Node, 
 but there's only so much traffic one server can handle. In short, it won't scale. 
 
+## Mesh Topology
 With this server, any number of instances can be launched on different IP/Port combinations
-and they will establish and maintain connections to each other. When an instance receives a 
-message for a user it doesn't know, it will forward it to all its peers.
+and they will establish and maintain connections to each other.
 
-Also, since a user could be connected to multiple server instances with separate clients, the
-message is also forwarded to peers.
+After a server instance connects to a peer, it sends a list of its users and the number of connections
+that user currently has open. Subsequently, when users connect and disconnect, the server instance
+updates all its peers about that user's connection status.
 
-## TODO
-In the current implementation, instances have no idea which users are connected to their peers.
-This means there is too much chattiness between peers. Basically every message goes out to every
-server, defeating the purpose of multiple server instances. 
+When an instance receives a message for a user it doesn't know, 
+it will forward it to any peers known to have a connection to that user.
 
-The coming fix will add to the peer-to-peer protocol a message that says when a user connects
-or disconnects. So all peers will be aware of each other's users, and messages will only be
-forwarded to servers where the recipient has a connection. Also, on a peer reconnect, a user
-list will be sent.
+Also, since a user could be connected to multiple server instances with separate clients, even if
+the user was connected to the server instance and sent the message, the message will  also forwarded 
+to any peers known to have a connection to that user.
+
+Since every server instance knows the users connected to all its peers, no database is required,
+to track where users are connected, a common bottleneck with Star Topology systems.
 
 ## Setup
 
