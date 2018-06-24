@@ -67,7 +67,7 @@ A simple Express server has been included to serve the chat client, as well as a
   * A client should be able to connect to any running instance and chat with a user on any other instance as though they were connected to the same instance.
   * The mechanism for connecting a user to a given instance is immaterial. It could be that the client chooses a random instance from a known list, or is assigned one by a load-balancer.
   * A given user could be connected with multiple clients, and so when a message is sent to them, all the user's clients should receive the message.
-  * Chat server instances must maintain a list of the users connected to its peers, so that messages are only forwarded to peers where the user is connected. Categorical forwarding to all peers would amount to all instances receiving all messages, defeating the purpose of the multi-server implementation.
+  * Chat server instances must maintain a list of the users connected to their peers, so that messages are only forwarded to peers where the user is connected. Categorical forwarding to all peers would amount to all instances receiving all messages, defeating the purpose of the multi-server implementation.
   
   
 ## Server Configuration
