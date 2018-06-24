@@ -48,6 +48,43 @@ let socket = require('socket.io')(port);
 socket.on(CONNECTION, onConnection);
 console.log(`Listening for connections on port: ${port}`);
 
+// Initiate connection to peers
+let io = require('socket.io-client');
+connectToPeers(config.servers);
+
+// Connect to peer servers
+function connectToPeers(servers){
+    console.log('Attempting to connect to peers...');
+    servers.forEach( peer => {
+        if (!peers[peer.id]) {
+
+            // Build host endpoint for peer
+            let host = `http://${peer.ip}:${peer.port}`;
+
+            // Attempt connection
+            console.log(`Attempt connection to peer: ${peer.id} at: ${host}`);
+            let peerSocket = io.connect(host, {reconnection:true} );
+            peerSocket.peerId = peer.id;
+
+            // Handle connection success
+            peerSocket.on(CONNECT, function() {
+                console.log(`Outbound connection to peer: ${this.peerId}`);
+
+                // Store the peer connection
+                peers[this.peerId] = peerSocket;
+
+                // Listen for peer disconnection
+                peerSocket.on(DISCONNECT, onDisconnect);
+            });
+
+            // Peer disconnected
+            function onDisconnect(){
+                console.log(`Peer: ${this.peerId} disconnected. Will retry automatically.`);
+            }
+        }
+    });
+}
+
 // Handle connection from clients (peers or users)
 function onConnection(connection) {
 
@@ -126,41 +163,3 @@ function onConnection(connection) {
         console.log(`User: ${user} connected ${users[user].length} times.`);
     }
 }
-
-// Initiate connection to peers
-let io = require('socket.io-client');
-connectToPeers(config.servers);
-
-// Connect to peer servers
-function connectToPeers(servers){
-    console.log('Attempting to connect to peers...');
-    servers.forEach( peer => {
-        if (!peers[peer.id]) {
-
-            // Build host endpoint for peer
-            let host = `http://${peer.ip}:${peer.port}`;
-
-            // Attempt connection
-            console.log(`Attempt connection to peer: ${peer.id} at: ${host}`);
-            let peerSocket = io.connect(host, {reconnection:true} );
-            peerSocket.peerId = peer.id;
-
-            // Handle connection success
-            peerSocket.on(CONNECT, function() {
-                console.log(`Outbound connection to peer: ${this.peerId}`);
-
-                // Store the peer connection
-                peers[this.peerId] = peerSocket;
-
-                // Listen for peer disconnection
-                peerSocket.on(DISCONNECT, onDisconnect);
-            });
-
-            // Peer disconnected
-            function onDisconnect(){
-                console.log(`Peer: ${this.peerId} disconnected. Will retry automatically.`);
-            }
-        }
-    });
-}
-
