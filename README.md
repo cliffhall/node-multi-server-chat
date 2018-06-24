@@ -25,6 +25,10 @@ to any peers known to have a connection to that user.
 Since every server instance knows which users are connected to each of its peers, no database is required,
 to track where users are connected, a common bottleneck with Star Topology systems.
 
+TODO: When a user with multiple client connections sends a message, update all the user's other clients
+with the message, so they can all reflect the same discussion history.
+
+
 ## Setup
 
 ### Install Node and npm
