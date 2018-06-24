@@ -22,7 +22,7 @@ Also, since a user could be connected to multiple server instances with separate
 the user was connected to the server instance and sent the message, the message will also be forwarded 
 to any peers known to have a connection to that user.
 
-Since every server instance knows the users connected to all its peers, no database is required,
+Since every server instance knows which users are connected to each of its peers, no database is required,
 to track where users are connected, a common bottleneck with Star Topology systems.
 
 ## Setup
