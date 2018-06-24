@@ -16,7 +16,7 @@ that user currently has open. Subsequently, when users connect and disconnect, t
 updates all its peers about that user's connection status.
 
 When an instance receives a message for a user it doesn't know, 
-it will forward it to any peers known to have a connection to that user.
+the instance will forward it to any peers known to have a connection to that user.
 
 Also, since a user could be connected to multiple server instances with separate clients, even if
 the user was connected to the server instance and sent the message, the message will  also forwarded 
