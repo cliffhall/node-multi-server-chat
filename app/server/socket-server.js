@@ -136,16 +136,16 @@ function onConnection(connection) {
             console.log(`Recipient ${message.to} not connected to this server`);
         }
 
-        // If message wasn't forwarded from another server, also forward to peers
+        // Unless forwarded, forward to all peers with connections for this user
         if (!message.forwarded){
-            console.log('Forwarding to peers...');
             message.forwarded = true;
             config.servers.forEach( server => {
                 let peer = peers[server.id];
-                if (peer) peer.emit(IM, message);
+                if (peer && peerUsers[server.id].find(u => u.id === message.to)) {
+                    console.log(`Forwarding to peer: ${server.id}...`);
+                    peer.emit(IM, message);
+                }
             });
-        } else {
-            console.log('Message was forwarded, the buck stops here');
         }
     }
 
@@ -215,7 +215,7 @@ function onConnection(connection) {
         if (count) console.log(`User: ${user} connected ${count} time${(count>1)?'s':''}.`);
 
         // Update peers
-        console.log(`Updating peers with user: ${user}...`);
+        console.log(`Updating peers with connection count for user: ${user}...`);
         let message = {
             peerId: myId,
             user: {
