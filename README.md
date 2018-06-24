@@ -140,4 +140,6 @@ and the possibility of a user to be connected to one or more instances one or mo
 
 ![Client Sends IM Sequence](img/sequence-client-sends-im.png "Client Sends IM Sequence")
 
+![Server Connects to Peer Sequence](img/sequence-server-connects-to-peer.png "Server Connects to Peer Sequence")
+
 ![Server Receives Forwarded IM Sequence](img/sequence-server-receives-forward.png "Server Receives Forwarded IM Sequence")

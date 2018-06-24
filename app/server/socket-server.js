@@ -3,7 +3,7 @@
 // Get config file specified on command line
 let config;
 let path = process.argv[2];
-let myid = process.argv[3];
+let myId = process.argv[3];
 let usage = 'Usage: node socket-server.js path/to/servers.json server-id';
 if (!path) {
     console.log(usage);
@@ -18,11 +18,11 @@ if (!path) {
         process.exit();
     }
     console.log('Config loaded.');
-    console.log(`My id: ${myid}`);
+    console.log(`My id: ${myId}`);
 }
 
 // Splice out the config for this server
-let myConfig = config.servers.find(server => server.id === myid);
+let myConfig = config.servers.find(server => server.id === myId);
 
 // Bail if we didn't find our config
 if (!myConfig){
@@ -36,11 +36,13 @@ const IDENT = 'identify';
 const CONNECT = 'connect';
 const CONNECTION = 'connection';
 const DISCONNECT = 'disconnect';
+const UPDATE_PEER = 'update-peer';
 
 // Connection hashes
 let peers = {};
 let users = {};
 let usersByConnection = {};
+let peerUsers = {};
 
 // Listen for clients
 let port = myConfig.port;
@@ -56,7 +58,7 @@ connectToPeers(config.servers);
 function connectToPeers(servers){
     console.log('Attempting to connect to peers...');
     servers.forEach( peer => {
-        if (!peers[peer.id]) {
+        if (peer.id !== myId) {
 
             // Build host endpoint for peer
             let host = `http://${peer.ip}:${peer.port}`;
@@ -64,22 +66,39 @@ function connectToPeers(servers){
             // Attempt connection
             console.log(`Attempt connection to peer: ${peer.id} at: ${host}`);
             let peerSocket = io.connect(host, {reconnection:true} );
-            peerSocket.peerId = peer.id;
+
+            // Store the peer connection
+            peers[peer.id] = peerSocket;
 
             // Handle connection success
             peerSocket.on(CONNECT, function() {
-                console.log(`Outbound connection to peer: ${this.peerId}`);
+                console.log(`Outbound connection to peer: ${peer.id}`);
 
-                // Store the peer connection
-                peers[this.peerId] = peerSocket;
+                // Create the users list for this peer
+                peerUsers[peer.id] = [];
 
                 // Listen for peer disconnection
                 peerSocket.on(DISCONNECT, onDisconnect);
+
+                // Update the newly connected peer
+                updatePeerWithUserList();
+
             });
 
             // Peer disconnected
             function onDisconnect(){
-                console.log(`Peer: ${this.peerId} disconnected. Will retry automatically.`);
+                console.log(`Peer: ${peer.id} disconnected. Will retry automatically.`);
+            }
+
+            // Update peer with our user list
+            function updatePeerWithUserList() {
+                let userIds = Object.keys(users);
+                if (userIds.length) { // send our list if we have any connections
+                    console.log(`Updating peer: ${peer.id} with user list...`);
+                    let list = userIds.map(id => ({id: id, connections: users[id].length}));
+                    let message = {list: list, peerId:myId};
+                    peerSocket.emit(UPDATE_PEER, message);
+                }
             }
         }
     });
@@ -92,6 +111,7 @@ function onConnection(connection) {
     connection.on(IM, onIm);
     connection.on(IDENT,onIdentify);
     connection.on(DISCONNECT, onDisconnect);
+    connection.on(UPDATE_PEER, onUpdatePeer);
 
     // Handle an identification event from a user
     function onIdentify(userId) {
@@ -122,10 +142,39 @@ function onConnection(connection) {
             message.forwarded = true;
             config.servers.forEach( server => {
                 let peer = peers[server.id];
-                peer.emit(IM, message);
+                if (peer) peer.emit(IM, message);
             });
         } else {
             console.log('Message was forwarded, the buck stops here');
+        }
+    }
+
+    // A peer updated us with info about one or more user connections
+    function onUpdatePeer(message) {
+        let peerId = message.peerId;
+        console.log(`Received update from peer: ${peerId}`);
+        if (message.list) { // list of all users, just replace
+            console.log(`Replacing user list for peer: ${peerId}`);
+            peerUsers[peerId] = message.list;
+        } else {
+            let user = message.user;
+            let users = peerUsers[peerId];
+            if (user && user.connections > 0) { // new connection for user
+                if (!users.find(u => u.id === user.id)) { // new user
+                    console.log(`Adding user ${user.id} to list for peer: ${peerId}`);
+                    // add the user to the peer's user list
+                    users.push(user);
+                } else {
+                    // replace user object in peer's user list
+                    console.log(`Replacing user ${user.id} in list for peer: ${peerId}`);
+                    peerUsers[peerId] = users.map(u => (u.id === user.id) ? user : u);
+                }
+            } else if (user && user.connections === 0) { // user no longer connected
+                // find the user object and remove it from the peer's user list
+                console.log(`Removing user ${user.id} from list for peer: ${peerId}`);
+                let index = users.findIndex(u => u.id === user.id);
+                if (index > -1) users.splice(index,1);
+            }
         }
     }
 
