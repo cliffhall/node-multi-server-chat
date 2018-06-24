@@ -19,7 +19,7 @@ When an instance receives a message for a user it doesn't know,
 it will forward that message to any peers known to have a connection to that user.
 
 Also, since a user could be connected to multiple server instances with separate clients, even if
-the user was connected to the server instance and sent the message, the message will  also forwarded 
+the user was connected to the server instance and sent the message, the message will also be forwarded 
 to any peers known to have a connection to that user.
 
 Since every server instance knows the users connected to all its peers, no database is required,
