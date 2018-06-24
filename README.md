@@ -1,7 +1,7 @@
 # node-multi-server-chat
 
 ## What is this?
-A multi-server chat example built with Node.js and Socket.io.
+A robust mesh topology multi-server chat example built with Node and Socket.io
 
 Simple Node-based chat server examples abound on GitHub. Single-endpoint examples 
 are great for learning the basics of socket communications with Node, 
