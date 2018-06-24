@@ -116,7 +116,7 @@ to all of the user's connected clients. It does not forward a forwarded message.
 The rudimentary client has a dropdown with two predefined users (Anna and Billy), 
 another dropdown with four possible ports to connect to, and a 'Connect' button.
 
-#### Unconnected client
+### Unconnected client
 ![Unconnected client](img/client-not-connected.png "Unconnected client")
 
 Choose a user and port then click 'Connect'. The recipient of your messages will be the user you didn't choose. 
@@ -126,9 +126,8 @@ back and forth.
 A client-side message history is currently outside the scope of this demo, which focuses on the multi-server aspect, 
 and the possibility of a user to be connected to one or more instances one or more times. 
 
-#### User with multiple connections receives IM in all clients
+### User with multiple connections receives IM in all clients
 ![User with multiple connections receives IM](img/client-multiple-connections.png "User with multiple connections receives IM")
-
 
 ## Protocol
 ![Client Connection Sequence](img/sequence-client-connection.png "Client Connection Sequence")
