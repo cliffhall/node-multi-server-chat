@@ -97,7 +97,6 @@ Remember that a user can connect multiple times, so a collection of sockets is k
     User: Anna connected 1 times.
     User: Anna connected 2 times.
 
-
 When a client sends a message to a user who is not on the same server instance they are connected to, the message is forwarded to all peers.
 
     User: Billy connected 1 times.
@@ -137,4 +136,3 @@ and the possibility of a user to be connected to one or more instances one or mo
 ![Client Sends IM Sequence](img/sequence-client-sends-im.png "Client Sends IM Sequence")
 
 ![Server Receives Forwarded IM Sequence](img/sequence-server-receives-forward.png "Server Receives Forwarded IM Sequence")
-
