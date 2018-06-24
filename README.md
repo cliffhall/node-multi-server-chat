@@ -168,6 +168,4 @@ and the possibility of a user to be connected to one or more instances one or mo
 
 ![Server Connects to Peer Sequence](img/sequence-server-connects-to-peer.png "Server Connects to Peer Sequence")
 
-![Server Update Peers Sequence](img/sequence-server-updates-peer.png "Server Update Peers Sequence")
-
 ![Server Receives Forwarded IM Sequence](img/sequence-server-receives-forward.png "Server Receives Forwarded IM Sequence")
