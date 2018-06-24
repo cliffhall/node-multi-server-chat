@@ -112,7 +112,7 @@ to all of the user's connected clients. It does not forward a forwarded message.
     Recipient Anna has 2 connection(s) to this server, sending...
     Message was forwarded, the buck stops here
 
-### Client Behavior
+## Client Behavior
 The rudimentary client has a dropdown with two predefined users (Anna and Billy), 
 another dropdown with four possible ports to connect to, and a 'Connect' button.
 
