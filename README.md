@@ -95,26 +95,46 @@ If a connected peer disconnects at runtime, other instances will attempt to reco
     Outbound connection to peer: server-3
     Outbound connection to peer: server-4
 
+When a server instance receives an update from a peer at connection time, it is a list of all users connected to
+that peer.
+
+    Received update from peer: server-3
+    Replacing user list for peer: server-3
+
+When a server instance receives an update from a peer about an individual user's connection status, it amends its
+internal list of users.
+
+    Received update from peer: server-1
+    Replacing user Anna in list for peer: server-1
+    Received update from peer: server-3
+    Adding user Billy to list for peer: server-3
+    Received update from peer: server-2
+    Removing user Anna from list for peer: server-2
+
 ### Client connections
 When a client connects to an instance, it sends the user's name, and the server hangs onto the socket, associating it with that user.
-Remember that a user can connect multiple times, so a collection of sockets is kept for each user. 
+Remember that a user can connect multiple times, so a collection of sockets is kept for each user. Also, when a user connects, the 
+server instance updates all its peers with the connection status of that user.
 
-    User: Anna connected 1 times.
+    User: Anna connected 1 time.
+    Updating peers with connection count for user: Anna...
     User: Anna connected 2 times.
+    Updating peers with connection count for user: Anna...
 
-When a client sends a message to a user who is not on the same server instance they are connected to, the message is forwarded to all peers.
+When a client sends a message to a user who is not on the same server instance they are connected to, the message is forwarded any peers known to have a connection to that user.
 
     User: Billy connected 1 times.
     Received IM from Billy to Anna: Hi Anna
     Recipient Anna not on this server
-    Forwarding to peers...
+    Forwarding to peer: server-1 ...
+    Forwarding to peer: server-2 ...
 
 When a server instance receives a forwarded message from a peer for a user that has one or more connections, it sends the message
 to all of the user's connected clients. It does not forward a forwarded message.
 
     Received forwarded IM from Billy to Anna: Hi Anna
     Recipient Anna has 2 connection(s) to this server, sending...
-    Message was forwarded, the buck stops here
+
 
 ## Client Behavior
 The rudimentary client has a dropdown with two predefined users (Anna and Billy), 
