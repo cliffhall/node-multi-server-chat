@@ -35,14 +35,14 @@ list will be sent.
 
 ```npm install```
 
-## Launching Server Instances
-For convenience, several npm scripts have been defined in ```package.json``` for launching the server instances.
+### Launching Socket Server Instances
+For convenience, several npm scripts have been defined in ```package.json``` for launching the socket server instances.
 
-### Inside your IDE
-If you're running a modern IDE like Webstorm, you can just open the npm window and double-click on each script. 
-A separate integrated terminal will launch and you can monitor  each instance's log output.
+#### Inside your IDE
+If you're running a modern IDE like Webstorm, you can just open the npm window and double-click on each ```start-server-x``` script. 
+A separate integrated terminal will launch and you can monitor each instance's log output.
 
-### From the command line
+#### From the command line
 In each of four separate terminal windows, enter one of the following commands: 
 
 ```npm run start-server-1```
@@ -52,6 +52,11 @@ In each of four separate terminal windows, enter one of the following commands:
 ```npm run start-server-3```
 
 ```npm run start-server-4```
+
+### Launching the Chat Client Server
+A simple Express server has been included to serve the chat client, as well as an npm script to launch it.
+
+```npm run serve-client```
 
 ## Design Assumptions
   * A scalable chat server should be able to communicate not only with the client, but with any number of peer instances. 
