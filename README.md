@@ -25,10 +25,6 @@ to any peers known to have a connection to that user.
 Since every server instance knows which users are connected to each of its peers, no database is required,
 to track where users are connected, a common bottleneck with Star Topology systems.
 
-TODO: When a user with multiple client connections sends a message, update all the user's other clients
-with the message, so they can all reflect the same discussion history.
-
-
 ## Setup
 
 ### Install Node and npm
@@ -169,3 +165,17 @@ and the possibility of a user to be connected to one or more instances one or mo
 ![Server Connects to Peer Sequence](img/sequence-server-connects-to-peer.png "Server Connects to Peer Sequence")
 
 ![Server Receives Forwarded IM Sequence](img/sequence-server-receives-forward.png "Server Receives Forwarded IM Sequence")
+
+## TODO 
+  * When a user with multiple client connections sends a message, update all the user's other clients
+with the message, so they can all reflect the same discussion history.
+
+  * Add richer client with message history display.
+  
+  * Make user an object instead of a string, giving it an id and a name.
+  
+  * Add load balancer which the client requests its endpoint from.
+  
+  * Add end-to-end encryption.
+  
+
