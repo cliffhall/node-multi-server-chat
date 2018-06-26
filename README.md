@@ -174,8 +174,6 @@ with the message, so they can all reflect the same discussion history.
   
   * Make user an object instead of a string, giving it an id and a name.
   
-  * Add load balancer which the client requests its endpoint from.
-  
   * Add end-to-end encryption.
   
 
