@@ -173,7 +173,4 @@ with the message, so they can all reflect the same discussion history.
   * Add richer client with message history display.
   
   * Make user an object instead of a string, giving it an id and a name.
-  
-  * Add end-to-end encryption.
-  
 
