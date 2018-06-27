@@ -67,7 +67,11 @@
                     socket.on(IM, onIm );
                     function onIm(message)
                     {
-                        writeStatus('RECEIVED: '+message.text);
+                        if (message.from === user) {
+                            writeStatus(`SENT: ${message.text} to ${message.to}` );
+                        } else {
+                            writeStatus(`RECEIVED: ${message.text} from ${message.from}`);
+                        }
                     }
 
                 }

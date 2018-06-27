@@ -127,13 +127,25 @@ function onConnection(connection) {
 
     // Handle an 'im' event from a client
     function onIm(message) {
+
         console.log(`Received ${message.forwarded?'forwarded ':''}IM from ${message.from} to ${message.to}: ${message.text}`);
-        let userConnections = users[message.to];
-        if (userConnections) { // User is connected to this server
-            console.log(`Recipient ${message.to} has ${userConnections.length} connection${userConnections.length>1?'s':''} to this server, sending...`);
-            userConnections.forEach(userConnection => userConnection.emit(IM, message));
+
+        // Send to all recipient connections
+        let recipientConnections = users[message.to];
+        if (recipientConnections) { // User is connected to this server
+            console.log(`Recipient ${message.to} has ${recipientConnections.length} connection${recipientConnections.length>1?'s':''} to this server, sending...`);
+            recipientConnections.forEach(userConnection => userConnection.emit(IM, message));
         } else {
             console.log(`Recipient ${message.to} not connected to this server`);
+        }
+
+        // Update sender's other connections so all their clients have complete discussion history
+        let senderConnections = users[message.from];
+        if (senderConnections) { // User is connected to this server
+            console.log(`Sender ${message.from} has ${senderConnections.length} connection${senderConnections.length>1?'s':''} to this server, sending...`);
+            senderConnections.forEach(senderConnection => senderConnection.emit(IM, message));
+        } else {
+            console.log(`Sender ${message.from} not connected to this server`);
         }
 
         // Unless forwarded, forward to all peers with connections for this user
@@ -142,6 +154,9 @@ function onConnection(connection) {
             config.servers.forEach( server => {
                 let peer = peers[server.id];
                 if (peer && peerUsers[server.id].find(u => u.id === message.to)) {
+                    console.log(`Forwarding to peer: ${server.id}...`);
+                    peer.emit(IM, message);
+                } else if (peer && peerUsers[server.id].find(u => u.id === message.from)) {
                     console.log(`Forwarding to peer: ${server.id}...`);
                     peer.emit(IM, message);
                 }
