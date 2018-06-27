@@ -22,6 +22,10 @@ Also, since a user could be connected to multiple server instances with separate
 the user was connected to the server instance and sent the message, the message will also be forwarded 
 to any peers known to have a connection to that user.
 
+Finally, when a user sends a message, and since they may have other connections on the instance or its peers,
+the message must also be sent to all the user's connections so that their own message histories
+will be able to reflect the complete discussion.
+
 Since every server instance knows which users are connected to each of its peers, no database is required,
 to track where users are connected, a common bottleneck with Star Topology systems.
 
@@ -167,8 +171,6 @@ and the possibility of a user to be connected to one or more instances one or mo
 ![Server Receives Forwarded IM Sequence](img/sequence-server-receives-forward.png "Server Receives Forwarded IM Sequence")
 
 ## TODO 
-  * When a user with multiple client connections sends a message, update all the user's other clients
-with the message, so they can all reflect the same discussion history.
 
   * Add cluster module support (vertical scaling) so a single port will do on a machine, while guaranteeing optimal use of CPUs.
 
