@@ -223,7 +223,7 @@ function onConnection(connection) {
         connection.removeListener(DISCONNECT, onDisconnect);
     }
 
-    // Report user connections
+    // Report user connections to console and peers
     function reportUserConnections(user){
         // Report number of connections on console
         let count = users[user] ? users[user].length : 0;
