@@ -153,7 +153,7 @@ Choose a user and port then click 'Connect'. The recipient of your messages will
 Launch another browser and log in as the other user, choosing either the same or a different port. Send messages
 back and forth. 
 
-A client-side message history is currently outside the scope of this demo (though it is on the TODO list.
+A client-side message history is currently outside the scope of this demo, but it is on the TODO list.
 
 ### User with multiple connections receives IM in all clients
 ![User with multiple connections receives IM](img/multi-client-user-receives.png "User with multiple connections receives IM")
