@@ -153,11 +153,13 @@ Choose a user and port then click 'Connect'. The recipient of your messages will
 Launch another browser and log in as the other user, choosing either the same or a different port. Send messages
 back and forth. 
 
-A client-side message history is currently outside the scope of this demo, which focuses on the multi-server aspect, 
-and the possibility of a user to be connected to one or more instances one or more times. 
+A client-side message history is currently outside the scope of this demo (though it is on the TODO list.
 
 ### User with multiple connections receives IM in all clients
-![User with multiple connections receives IM](img/client-multiple-connections.png "User with multiple connections receives IM")
+![User with multiple connections receives IM](img/multi-client-user-receives.png "User with multiple connections receives IM")
+
+### User with multiple connections sends IM, is notified in all clients so message histories can stay in sync
+![User with multiple connections sends IM](img/multi-client-user-sends.png "User with multiple connections sends IM")
 
 ## Protocol
 ![Client Connection Sequence](img/sequence-client-connection.png "Client Connection Sequence")

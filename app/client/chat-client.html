@@ -47,7 +47,7 @@
                 selectedRecipient.innerHTML = recipient = (user === 'Anna') ? 'Billy':'Anna';
 
                 // Connect
-                let host = 'http://localhost:'+port;
+                let host = `http://localhost:${port}`;
                 socket = io.connect(host);
 
                 // Set listeners
@@ -68,12 +68,11 @@
                     function onIm(message)
                     {
                         if (message.from === user) {
-                            writeStatus(`SENT: ${message.text} to ${message.to}` );
+                            writeStatus(`SENT: ${IM} / ${message.text} <BR> TO: ${message.to}` );
                         } else {
-                            writeStatus(`RECEIVED: ${message.text} from ${message.from}`);
+                            writeStatus(`RECEIVED: ${IM} / ${message.text} <BR> FROM: ${message.from}`);
                         }
                     }
-
                 }
 
                 // Received disconnect event from socket
@@ -87,7 +86,7 @@
                 // Received error from socket
                 function onError(message)
                 {
-                    writeStatus('<span style="color: red;">ERROR:</span> ' + message);
+                    writeStatus(`<span style="color: red;">ERROR:</span> ${message}`);
                     socket.close();
                 }
             }
@@ -96,14 +95,13 @@
             function sendIdent(userId)
             {
                 socket.emit(IDENT, userId);
-                writeStatus("SENT: " + IDENT + " / " + userId);
+                writeStatus(`SENT: ${IDENT} / ${userId}`);
             }
 
             // Send a message over the socket
             function sendIm(message)
             {
                 socket.emit(IM, {'from': user, 'to': recipient, 'text': message, 'forwarded':false});
-                writeStatus("SENT: " + IM + " / " + message);
             }
 
             // Output status
@@ -118,6 +116,7 @@
             }
 
             window.addEventListener("load", init, false);
+
         </script>
         <style>
             .hide {display:none;}
@@ -155,7 +154,7 @@
             <p><b>User</b><div id="selectedUser"></div></p>
             <p><b>Port</b><div id="selectedPort"></div></p>
             <p><b>Recipient:</b><div id="selectedRecipient"></div></p>
-            <p><b>Message</b>
+            <p><label for="userInput">Message</label>
                 <div><input id="userInput"/>
                 <button id="btnSend" onclick="sendIm(userInput.value)">Send</button>
                 </div>
