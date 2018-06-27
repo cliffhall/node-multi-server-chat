@@ -172,6 +172,7 @@ with the message, so they can all reflect the same discussion history.
 
   * Add cluster module support (vertical scaling) so a single port will do on a machine, while guaranteeing optimal use of CPUs.
 
-  * Add richer client with message history display.
-  
   * Make user an object instead of a string, giving it an id and a name.
+
+  * Add richer client with message history display.
+ 
