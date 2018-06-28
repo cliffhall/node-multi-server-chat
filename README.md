@@ -174,11 +174,11 @@ A client-side message history is currently outside the scope of this demo, but i
 
 ## TODO 
 
+  * Add shell that opens multiple clients in iframes for testing. (Thanks to Kyle at Oasis Digital for this suggestion)
+  
   * Make user an object instead of a string, giving it an id and a name.
 
   * Add cluster module support (vertical scaling) so a single port will do on a machine, while guaranteeing optimal use of CPUs.
 
-  * Add shell that opens multiple clients in iframes for testing. (Thanks to Kyle at Oasis Digital for this suggestion)
-  
   * Add richer client with message history display.
  
