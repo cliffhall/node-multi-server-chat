@@ -226,6 +226,7 @@ function onConnection(connection) {
                 }
             }
             reportUserConnections(userId);
+            updateClients();
         }
 
         // Remove listeners
