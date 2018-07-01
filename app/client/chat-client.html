@@ -21,6 +21,7 @@
             const DISCONNECT    = 'disconnect';
             const CONNECT_ERR   = 'connect_error';
             const RECONNECT_ERR = 'reconnect_error';
+            const UPDATE_CLIENT = 'update_client';
 
             // Initialize the page when loaded
             function init()
@@ -62,9 +63,11 @@
                     writeStatus("CONNECTED");
                     divConnected.className = 'show';
                     divDisconnected.className = 'hide';
-                    sendIdent(user); // Should be a a user id, using a name for clarity
+                    sendIdent(user);
 
-                    socket.on(IM, onIm );
+                    socket.on(IM, onIm);
+                    socket.on(UPDATE_CLIENT, onUpdateClient);
+
                     function onIm(message)
                     {
                         if (message.from === user) {
@@ -73,6 +76,12 @@
                             writeStatus(`RECEIVED: ${IM} / ${message.text} <BR> FROM: ${message.from}`);
                         }
                     }
+
+                    function onUpdateClient(list) {
+                        console.log(list);
+                    }
+
+
                 }
 
                 // Received disconnect event from socket

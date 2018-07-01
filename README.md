@@ -15,19 +15,23 @@ After a server instance connects to a peer, it sends a list of its users and the
 that user currently has open. Subsequently, when users connect and disconnect, the server instance
 updates all its peers about that user's connection status.
 
-When an instance receives a message for a user it doesn't know, 
-it will forward that message to any peers known to have a connection to that user.
-
-Also, since a user could be connected to multiple server instances with separate clients, even if
-the user was connected to the server instance and sent the message, the message will also be forwarded 
-to any peers known to have a connection to that user.
-
-Finally, when a user sends a message, and since they may have other connections on the instance or its peers,
-the message must also be sent to all the user's connections so that their own message histories
-will be able to reflect the complete discussion.
-
 Since every server instance knows which users are connected to each of its peers, no database is required,
 to track where users are connected, a common bottleneck with Star Topology systems.
+
+### Routing messages to recipients
+When a server instance receives a message for a user it doesn't know, it will forward that message to 
+any peers known to have a connection to that user.
+
+Since the intended recipeint could be connected to multiple server instances with separate clients, 
+the message will also be forwarded to any peers known to have a connection to the recipient.
+
+### Keeping the sender's clients in sync
+The sender's message must also be sent to all their connections on all servers so that their
+message histories will be able to reflect the complete discussion.
+
+### Updating clients with the user list
+Whenever a user connects to (or disconnects from) a server instance, all users connected to the mesh
+will be sent a sorted, unique list of currently connected users.
 
 ## Setup
 
@@ -102,30 +106,41 @@ If a connected peer disconnects at runtime, other instances will attempt to reco
     Outbound connection to peer: server-4
 
 When a server instance receives an update from a peer at connection time, it is a list of all users connected to
-that peer.
+that peer. It then updates all its connected clients with the new user list.
 
     Received update from peer: server-3
     Replacing user list for peer: server-3
+    Updating clients with new user list...
+
 
 When a server instance receives an update from a peer about an individual user's connection status, it amends its
-internal list of users.
+internal list of users. It then updates all its connected clients with the new user list.
 
     Received update from peer: server-1
     Replacing user Anna in list for peer: server-1
+    Updating clients with new user list...
+
     Received update from peer: server-3
     Adding user Billy to list for peer: server-3
+    Updating clients with new user list...
+
     Received update from peer: server-2
     Removing user Anna from list for peer: server-2
+    Updating clients with new user list...
+
 
 ### Client connections
 When a client connects to an instance, it sends the user's name, and the server hangs onto the socket, associating it with that user.
 Remember that a user can connect multiple times, so a collection of sockets is kept for each user. Also, when a user connects, the 
-server instance updates all its peers with the connection status of that user.
+server instance updates all its peers with the connection status of that user and then updates all its connected clients with the new user list.
 
     User: Anna connected 1 time.
     Updating peers with connection count for user: Anna...
+    Updating clients with new user list...
     User: Anna connected 2 times.
     Updating peers with connection count for user: Anna...
+    Updating clients with new user list...
+
 
 When a client sends a message to a user who is not on the same server instance they are connected to, the message is forwarded any peers known to have a connection to that user.
 
@@ -146,6 +161,13 @@ to all of the user's connected clients. It does not forward a forwarded message.
 The rudimentary client has a dropdown with two predefined users (Anna and Billy), 
 another dropdown with four possible ports to connect to, and a 'Connect' button.
 
+The following features are out of scope for this simple client, but are being added to a 
+more sophisticated [React-based client](https://github.com/cliffhall/react-chat-client).
+
+  * Client-side message history. 
+  * Client-side connected user list. This client simply logs the user list to the console when it is received. 
+  
+
 ### Unconnected client
 ![Unconnected client](img/client-not-connected.png "Unconnected client")
 
@@ -153,13 +175,12 @@ Choose a user and port then click 'Connect'. The recipient of your messages will
 Launch another browser and log in as the other user, choosing either the same or a different port. Send messages
 back and forth. 
 
-A client-side message history is currently outside the scope of this demo, but it is on the TODO list.
-
 ### User with multiple connections receives IM in all clients
 ![User with multiple connections receives IM](img/multi-client-user-receives.png "User with multiple connections receives IM")
 
 ### User with multiple connections sends IM, is notified in all clients so message histories can stay in sync
 ![User with multiple connections sends IM](img/multi-client-user-sends.png "User with multiple connections sends IM")
+
 
 ## Protocol
 ![Client Connection Sequence](img/sequence-client-connection.png "Client Connection Sequence")
@@ -172,12 +193,13 @@ A client-side message history is currently outside the scope of this demo, but i
 
 ![Server Receives Forwarded IM Sequence](img/sequence-server-receives-forward.png "Server Receives Forwarded IM Sequence")
 
+ 
+
+
 ## TODO 
 
   * Add shell that opens multiple clients in iframes for testing. (Thanks to Kyle at Oasis Digital for this suggestion)
   
-  * Make user an object instead of a string, giving it an id and a name.
-
   * Add cluster module support (vertical scaling) so a single port will do on a machine, while guaranteeing optimal use of CPUs.
 
   * Add richer client with message history display.

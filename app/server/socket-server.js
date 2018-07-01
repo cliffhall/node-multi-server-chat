@@ -36,7 +36,8 @@ const IDENT = 'identify';
 const CONNECT = 'connect';
 const CONNECTION = 'connection';
 const DISCONNECT = 'disconnect';
-const UPDATE_PEER = 'update-peer';
+const UPDATE_PEER = 'update_peer';
+const UPDATE_CLIENT = 'update_client';
 
 // Connection hashes
 let peers = {};
@@ -115,6 +116,8 @@ function onConnection(connection) {
 
     // Handle an identification event from a user
     function onIdentify(userId) {
+
+        // Store the connection for this user
         let user = users[userId];
         if (user){
             user.push(connection);
@@ -122,7 +125,12 @@ function onConnection(connection) {
             users[userId] = [connection];
         }
         usersByConnection[connection.id] = userId;
+
+        // Log the new connection and update peers
         reportUserConnections(userId);
+
+        // Send new user list to all the clients (including this one)
+        updateClients();
     }
 
     // Handle an 'im' event from a client
@@ -191,6 +199,9 @@ function onConnection(connection) {
                 if (index > -1) users.splice(index,1);
             }
         }
+
+        // Let all the clients know the user list has changed
+        updateClients();
     }
 
     // Handle disconnect from a client
@@ -243,4 +254,28 @@ function onConnection(connection) {
             if (peer) peer.emit(UPDATE_PEER, message);
         });
     }
+
+}
+
+// Update clients with user list
+function updateClients(){
+    console.log(`Updating clients with new user list...`);
+    let message = {
+        list: getSystemUserList()
+    };
+    Object.keys(users).forEach(user =>
+        users[user].forEach(connection =>
+            connection.emit(UPDATE_CLIENT, message)
+        )
+    );
+}
+
+function getSystemUserList(){
+    let usersHash = Object.assign({}, users);
+    Object.keys(peerUsers).forEach( peerId => {
+        peerUsers[peerId].forEach( user => usersHash[user.id] = true);
+    });
+    let uniqueUsers = Object.keys(usersHash);
+    uniqueUsers.sort();
+    return uniqueUsers;
 }
