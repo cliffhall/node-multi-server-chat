@@ -200,7 +200,5 @@ back and forth.
 
   * Add shell that opens multiple clients in iframes for testing. (Thanks to Kyle at Oasis Digital for this suggestion)
   
-  * Add cluster module support (vertical scaling) so a single port will do on a machine, while guaranteeing optimal use of CPUs.
-
-  * Add richer client with message history display.
+  * Add cluster module support, so a single port will do on a machine, while guaranteeing optimal use of CPUs.
  

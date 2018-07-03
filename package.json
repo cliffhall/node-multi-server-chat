@@ -1,13 +1,13 @@
 {
-  "name": "multi-server-chat-poc",
+  "name": "node-multi-server-chat",
   "version": "1.0.0",
-  "description": "Handle chat communication via sockets across multiple node instances",
+  "description": "A robust multi-server chat example built with Node and Socket.io",
   "scripts": {
-    "serve-client": "node app/client/client-server.js",
-    "start-server-1": "node app/server/socket-server.js app/server/config.json server-1",
-    "start-server-2": "node app/server/socket-server.js app/server/config.json server-2",
-    "start-server-3": "node app/server/socket-server.js app/server/config.json server-3",
-    "start-server-4": "node app/server/socket-server.js app/server/config.json server-4"
+    "serve-client": "node src/client/client-server.js",
+    "start-server-1": "node src/server/socket-server.js src/server/config.json server-1",
+    "start-server-2": "node src/server/socket-server.js src/server/config.json server-2",
+    "start-server-3": "node src/server/socket-server.js src/server/config.json server-3",
+    "start-server-4": "node src/server/socket-server.js src/server/config.json server-4"
   },
   "dependencies": {
     "express": "^4.16.3",
