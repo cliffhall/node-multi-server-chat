@@ -14,6 +14,7 @@
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.1"
   },
+  "repository": "https://github.com/cliffhall/node-multi-server-chat.git",
   "devDependencies": {},
   "author": "Cliff Hall",
   "license": "MIT"
