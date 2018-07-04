@@ -104,7 +104,7 @@ If a connected peer disconnects at runtime, other instances will attempt to reco
     Outbound connection to peer: server-4
 
 When a server instance receives an update from a peer at connection time, it is a list of all users connected to
-that peer. It then updates all its connected clients with the new user list.
+that peer. It then updates all its connected clients with the new aggregate user list.
 
     Received update from peer: server-3
     Replacing user list for peer: server-3
@@ -112,7 +112,7 @@ that peer. It then updates all its connected clients with the new user list.
 
 
 When a server instance receives an update from a peer about an individual user's connection status, it amends its
-internal list of users. It then updates all its connected clients with the new user list.
+internal list of users. It then updates all its connected clients with the new aggregate user list.
 
     Received update from peer: server-1
     Replacing user Anna in list for peer: server-1
