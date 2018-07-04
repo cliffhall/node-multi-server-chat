@@ -75,7 +75,7 @@ A simple Express server has been included to serve the chat client, as well as a
 ## Server Configuration
 A configuration file ```config.json``` contains entries for all instances, so they can listen on the right port and connect to their peers.
 For simplicity's sake, server instances are configured to be launched on different ports of your local machine, 
-but instances to run on any port / IP address:
+but instancescan run on any port / IP address combination:
 
     {
       "id": "server-1",
