@@ -15,8 +15,8 @@ After a server instance connects to a peer, it sends a list of its users and the
 that user currently has open. Subsequently, when users connect and disconnect, the server instance
 updates all its peers about that user's connection status.
 
-Since every server instance always knows which users are connected to each of its peers, no database is required, 
-a common bottleneck with Star Topology systems.
+Because every server instance always knows which users are connected to each of its peers, 
+no database is required, a common bottleneck with Star Topology systems.
  
 And since only a user's name and connection count is stored per connection, a 100k users with an average name 
 length of nine characters and one connection would take up less than 1MB of memory. Clients are charged with 
