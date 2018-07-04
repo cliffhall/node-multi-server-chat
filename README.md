@@ -163,8 +163,8 @@ to all of the user's connected clients. It does not forward a forwarded message.
 The rudimentary client has a dropdown with two predefined users (Anna and Billy), 
 another dropdown with four possible ports to connect to, and a 'Connect' button.
 
-The following features are out of scope for this simple client, but are being added to a 
-more sophisticated [React-based client](https://github.com/cliffhall/react-chat-client).
+The following features are out of scope for this simple client, but have been added to a more sophisticated 
+[React-based client](https://github.com/cliffhall/react-chat-client).
 
   * Client-side message history. 
   * Client-side connected user list. This client simply logs the user list to the console when it is received. 
