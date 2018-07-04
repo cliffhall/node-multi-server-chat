@@ -15,14 +15,18 @@ After a server instance connects to a peer, it sends a list of its users and the
 that user currently has open. Subsequently, when users connect and disconnect, the server instance
 updates all its peers about that user's connection status.
 
-Since every server instance knows which users are connected to each of its peers, no database is required,
-to track where users are connected, a common bottleneck with Star Topology systems.
+Since every server instance always knows which users are connected to each of its peers, no database is required, 
+a common bottleneck with Star Topology systems.
+ 
+And since only a user's name and connection count is stored per connection, a 100k users with an average name 
+length of nine characters and one connection would take up less than 1MB of memory. Clients are charged with 
+accumulating their own message histories.
 
 ### Routing messages to recipients
 When a server instance receives a message for a user it doesn't know, it will forward that message to 
 any peers known to have a connection to that user.
 
-Since the intended recipeint could be connected to multiple server instances with separate clients, 
+Since the intended recipient could be connected to multiple server instances with separate clients, 
 the message will also be forwarded to any peers known to have a connection to the recipient.
 
 ### Keeping the sender's clients in sync
