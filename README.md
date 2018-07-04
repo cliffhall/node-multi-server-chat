@@ -133,7 +133,8 @@ internal list of users. It then updates all its connected clients with the new u
 ### Client connections
 When a client connects to an instance, it sends the user's name, and the server hangs onto the socket, associating it with that user.
 Remember that a user can connect multiple times, so a collection of sockets is kept for each user. Also, when a user connects, the 
-server instance updates all its peers with the connection status of that user and then updates all its connected clients with the new user list.
+server instance updates all its peers with the connection status of that user and then updates all its connected clients with the 
+new aggregate user list.
 
     User: Anna connected 1 time.
     Updating peers with connection count for user: Anna...
