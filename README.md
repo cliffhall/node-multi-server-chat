@@ -26,9 +26,6 @@ accumulating their own message histories.
 When a server instance receives a message for a user it doesn't know, it will forward that message to 
 any peers known to have a connection to that user.
 
-Since the intended recipient could be connected to multiple server instances with separate clients, 
-the message will also be forwarded to any peers known to have a connection to the recipient.
-
 ### Keeping the sender's clients in sync
 The sender's message must also be sent to all their connections on all servers so that their
 message histories will be able to reflect the complete discussion.
