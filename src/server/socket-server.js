@@ -161,10 +161,11 @@ function onConnection(connection) {
             message.forwarded = true;
             config.servers.forEach( server => {
                 let peer = peers[server.id];
-                if (peer && peerUsers[server.id].find(u => u.id === message.to)) {
+                let users = peerUsers[server.id];
+                if (!!peer && !!users && users.find(u => u.id === message.to)) {
                     console.log(`Forwarding to peer: ${server.id}...`);
                     peer.emit(IM, message);
-                } else if (peer && peerUsers[server.id].find(u => u.id === message.from)) {
+                } else if (!!peer && !!users && users.find(u => u.id === message.from)) {
                     console.log(`Forwarding to peer: ${server.id}...`);
                     peer.emit(IM, message);
                 }
@@ -181,16 +182,19 @@ function onConnection(connection) {
             peerUsers[peerId] = message.list;
         } else {
             let user = message.user;
-            let users = peerUsers[peerId];
+            let users = peerUsers[peerId] || [];
             if (user && user.connections > 0) { // new connection for user
-                if (!users.find(u => u.id === user.id)) { // new user
+                if (!!users && !users.find(u => u.id === user.id)) { // new user
                     console.log(`Adding user ${user.id} to list for peer: ${peerId}`);
                     // add the user to the peer's user list
                     users.push(user);
-                } else {
+                } else if (!!users && users.find(u => u.id === user.id)) {
                     // replace user object in peer's user list
                     console.log(`Replacing user ${user.id} in list for peer: ${peerId}`);
                     peerUsers[peerId] = users.map(u => (u.id === user.id) ? user : u);
+                } else {
+                    // first user to connect to peer since peer connected to us
+                    peerUsers[peerId] = [user];
                 }
             } else if (user && user.connections === 0) { // user no longer connected
                 // find the user object and remove it from the peer's user list
